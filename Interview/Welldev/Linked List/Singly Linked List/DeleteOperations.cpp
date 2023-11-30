@@ -15,7 +15,6 @@ class solution{
     public:
         void getPrint(Node* head)
         {
-            cout<<"Given Linked List: "<<endl;
             if(head == nullptr) cout<<"NULL";
 
             while( head != nullptr)
@@ -37,47 +36,43 @@ class solution{
             return count;
         }
 
-        Node* insertAtHead(Node* head, int num)
-        {
-            Node* temp = new Node(num);
-            temp->next= head;
-            
-            return temp;
+        Node* deleteAtHead(Node* head)
+        {   
+            return head->next;
         }
 
-        void insertAtEnd(Node* head, int num)
+        void deleteAtEnd(Node* head)
         {
-            while( head->next != nullptr)
+            Node* fast= head->next;
+            Node* slow= head;
+
+            while( fast->next != nullptr)
             {
-                head= head->next;
+                fast= fast->next;
+                slow= slow->next;
             }
-
-            Node* temp= new Node(num);
-            head->next= temp;
-
+            slow->next= nullptr;
         }
 
-        void insertAtIndex(Node* head, int idx, int num)
+        void deleteAtIndex(Node* head, int idx)
         {
             int n= getSize(head);
 
-            if( idx == 0) insertAtHead(head, num);
-            else if( idx>n ) cout<<"index is greater than List Size"<<endl;
-            else if( idx == n ) insertAtEnd(head,num);
+            if( idx == 0) deleteAtHead(head);
+            else if( idx>n ) cout<<"index is greater than List Size."<<endl;
+            else if( idx == n ) deleteAtEnd(head);
 
             for(int i=0; i<idx-1; i++)
             {
-                head= head->next;
+                head= head->next; //previos of idx position
             }
-            Node* temp = new Node(num);
-            temp->next= head->next;
-            head->next= temp;
+            head->next= head->next->next;
         }
 };
 
 int main()
 {
-    vector<int> nums={1,2,3,4,6,7};
+    vector<int> nums={0,1,2,3,4,5,6,7};
     
     //creating the head Node
     struct Node* head = new Node(nums[0]);
@@ -91,16 +86,21 @@ int main()
     }
 
     solution obj;
+    cout<<"Given Linked List :"<<endl;
     obj.getPrint(head);
     cout<<"The Size of Linked List is: "<<obj.getSize(head)<<endl;
 
-    head= obj.insertAtHead(head, 0);
+    head= obj.deleteAtHead(head);
+    cout<<"After Deleting Head Node: "<<endl;
     obj.getPrint(head);
 
-    obj.insertAtEnd(head,8);
+    obj.deleteAtEnd(head);
+    cout<<"After Deleting Tail Node: "<<endl;
     obj.getPrint(head);
 
-    obj.insertAtIndex(head, 5, 5);
+
+    obj.deleteAtIndex(head, 3);
+    cout<<"After Deleting 3rd( 0-indexing) Node: "<<endl;
     obj.getPrint(head);
 
     return 0;
