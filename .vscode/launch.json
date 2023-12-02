@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/User/Desktop/REACT/LEETCODE/Interview/Welldev/Linked List/Circular Linked List",
-      "program": "c:/Users/User/Desktop/REACT/LEETCODE/Interview/Welldev/Linked List/Circular Linked List/build/Debug/outDebug",
+      "cwd": ".",
+      "program": "build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
