@@ -2,6 +2,18 @@
 
 ওয়েলডেভ এর প্রিপারেশন কিছুটা স্ট্রেইট ফরোয়ার্ড। যেহেতু ইন্টার্ভিউ ইংলিশ মিডিয়ামে। যারা interview নেয়, তাদের সামনে একটা docs থাকে, যেখানে আগে থেকেই কিছু প্রশ্ন রেডি করা থাকে, যেইগুলোই interview এ প্রশ্ন করা হয়। একেবারে বেসিক লেভেল এর প্রশ্ন করে থাকে প্রথম টেকনিক্যাল রাউন্ড এ। সেকেন্ড টেকনিক্যাল রাউন্ড এ DP থেকে কুশ্চেন করে থাকে। এ ছাড়া বাকী সব অন্য কোম্পানির মতই। 
 
+# MCQ Topics
+1. OOP
+2. DSA
+3. Sorting Algorithm
+4. Network(Routing, OSI model)
+5. Amplitude Question (Byju's)
+6. Probability Math
+7. REST API
+8. Error Code(Http status code 429, API response code 401)
+9. Design Pattern (MVC, )
+10. Singleton Design Pattern
+
 # HR Call
 
 প্রথম টেকনিক্যাল interview এর আগে HR তোমাকে কল দিবে। কথা হবে english এ। তাই আগে থেকেই কিছুটা প্রিপারেশন থাকা জরুরি। 
