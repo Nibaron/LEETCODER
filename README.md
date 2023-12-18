@@ -2,5 +2,5 @@
 
 My Leetcode Code and related things will be posted here.
 
-![image](https://github.com/Nibaron/LEETCODE/assets/36547410/f97fd787-2678-4b0e-a2c8-bb96b510bac7)
+![image](https://github.com/Nibaron/LEETCODER/assets/36547410/67b868f8-5bdb-4a73-bbfd-f8753f226ce7)
 
