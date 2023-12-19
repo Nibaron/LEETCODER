@@ -11,8 +11,8 @@
 6. Probability Math
 7. REST API
 8. Error Code(Http status code 429, API response code 401)
-9. Design Pattern (MVC, )
-10. Singleton Design Pattern
+9. Design Pattern (MVC, MVP, MVVM)
+10. Singleton Design Pattern, Factory Design Pattern
 
 # HR Call
 
