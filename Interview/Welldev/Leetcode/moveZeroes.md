@@ -1,6 +1,5 @@
 # Brute Force
 
-
 - Time complexity: $$O(n^2)$$
 <!-- Add your time complexity here, e.g. $$O(n)$$ -->
 
