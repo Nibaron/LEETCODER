@@ -142,3 +142,23 @@ Output: 16 24
 Total 60 minutes technical round, little depth, same type. Take more preparation on your project, sdlc, security, hacking term.
 
 ## Final Behavioral Round
+
+## Glassdoor Interview
+- Sort an array that consists with elements of odd numbers.
+- Valid Parenthesis
+
+1. What is OOP, OOP C++ output tracing
+2. Write pseudocode of generating fibonacci number using only two variable
+3. Write post order traversal sequence of a binary tree.
+4. Write SQL to show only those rows those are repeated on the table
+5. Two Sum problem, print all the pairs
+6. Linked List advantages and disadvantages.
+7. What do you understand by the term Dependency Injection?
+8. Why do you think Testing is important?
+9. How do you balance between a tight deadline and preserving best practices for future maintainability?
+
+- Reverse Linked List, sliding window problem.
+- Swap values of two variables without using any additional variables. 
+- Find the cycle on a linked list. 
+- Write SQL query based on joining two tables.
+- consider you've [1, 2, 5, 10, 20, 50, 100, 200] notes, for an input amount give an output of the minimum number of notes required and what are those?
