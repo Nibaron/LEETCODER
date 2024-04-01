@@ -323,64 +323,37 @@ class  Solution {
 
 public:
 
-int  firstMissingPositive(vector<int>&  nums) {
+    int  firstMissingPositive(vector<int>&  nums) {
 
-int n= nums.size();
+        int n= nums.size();
 
-  
+        // we make the children sit on their own chair
+        for(int i=0; i<n; i++)
+        {
+            int child = nums[i]; // 4
+            // for negative and greater number it can not be children
+            if( child >= 1 && child <= n )
+            {
+                int chair = child -1; // 3 ( child 4 should sit on chair 3 or nums at 3)
 
-// we make the children sit on their own chair
+                if(nums[chair] != child ) // if children siting wrong position
+                {
+                    swap( nums[chair], nums[i]);
+                    i--;
+                }
+            }
+        }
+        // we check missing chair
+        int i;
 
-for(int i=0; i<n; i++)
+        for(i=0; i<n; i++)
+        {
+            if( i+1 != nums[i] ) return i+1;
+        }
 
-{
-
-int child = nums[i]; // 4
-
-// for negative and greater number it can not be children
-
-if( child >= 1 && child <= n )
-
-{
-
-int chair = child -1; // 3 ( child 4 should sit on chair 3 or nums at 3)
-
-  
-
-if(nums[chair] != child ) // if children siting wrong position
-
-{
-
-swap( nums[chair], nums[i]);
-
-i--;
-
-}
-
-}
-
-}
-
-  
-
-// we check missing chair
-
-int i;
-
-for(i=0; i<n; i++)
-
-{
-
-if( i+1 != nums[i] ) return i+1;
-
-}
-
-//if all children siting the right position, we answer the i+1
-
-return i+1;
-
-}
-
+        //if all children siting the right position, we answer the i+1
+        return i+1;
+        }
 };
 
 // alisha di's mother and children algorith
@@ -388,17 +361,13 @@ return i+1;
 //https://www.youtube.com/watch?v=aBhla9jSAeg
 
   
-
 /*
 
 * right position
-
 * 1 2 3 4 (children)
-
 * 0 1 2 3 (chair)
 
 *
-
 *wrong position
 
 *
