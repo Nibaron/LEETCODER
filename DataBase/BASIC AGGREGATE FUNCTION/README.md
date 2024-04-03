@@ -375,3 +375,212 @@ GROUP  BY query_name;
 
 -- ROUND( SUM(rating/position)/COUNT(query_name) ,2) AS quality, OR,AVG(rating/position)
 ```
+# [1193. Monthly Transactions I](https://leetcode.com/problems/monthly-transactions-i/description/?envType=study-plan-v2&envId=top-sql-50)
+
+Table: `Transactions`
+
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| country       | varchar |
+| state         | enum    |
+| amount        | int     |
+| trans_date    | date    |
++---------------+---------+
+id is the primary key of this table.
+The table has information about incoming transactions.
+The state column is an enum of type ["approved", "declined"].
+```
+
+Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+
+Return the result table in **any order** .
+
+The query result format is in the following example.
+
+**Example 1:** 
+
+```
+Input: 
+Transactions table:
++------+---------+----------+--------+------------+
+| id   | country | state    | amount | trans_date |
++------+---------+----------+--------+------------+
+| 121  | US      | approved | 1000   | 2018-12-18 |
+| 122  | US      | declined | 2000   | 2018-12-19 |
+| 123  | US      | approved | 2000   | 2019-01-01 |
+| 124  | DE      | approved | 2000   | 2019-01-07 |
++------+---------+----------+--------+------------+
+Output: 
++----------+---------+-------------+----------------+--------------------+-----------------------+
+| month    | country | trans_count | approved_count | trans_total_amount | approved_total_amount |
++----------+---------+-------------+----------------+--------------------+-----------------------+
+| 2018-12  | US      | 2           | 1              | 3000               | 1000                  |
+| 2019-01  | US      | 1           | 1              | 2000               | 2000                  |
+| 2019-01  | DE      | 1           | 1              | 2000               | 2000                  |
++----------+---------+-------------+----------------+--------------------+-----------------------+
+```
+>My Code
+```sql
+
+# Write your MySQL query statement below
+
+SELECT  DATE_FORMAT(trans_date,  "%Y-%m")  AS  month,country,
+
+COUNT(state)  AS trans_count,
+
+SUM(state='approved'  )  AS approved_count,
+
+SUM(amount)  AS trans_total_amount,
+
+SUM(IF(state='approved',amount,0))  as approved_total_amount
+
+FROM Transactions
+
+GROUP  BY  month, country;
+```
+REMEMBER,
+No, we cannot use `COUNT` instead of `SUM` in this context. The reason is that `COUNT` counts the number of non-null values in a column, while `SUM` adds up the numerical values in a column.
+
+In the expression `SUM(state = 'approved')`, the condition `state = 'approved'` evaluates to either `1` (true) or `0` (false) for each row. So, `SUM(state = 'approved')` effectively counts the number of rows where the condition is true, which is the same as counting the occurrences of the `'approved'` state.
+
+However, if you use `COUNT(state = 'approved')`, it will count the number of non-null values in the `state = 'approved'` column. Since the `COUNT` function does not treat boolean values as numerical values to be added up, it will not yield the desired result of counting the occurrences of the `'approved'` state.
+
+Therefore, in this context, using `SUM` is the correct choice to count the occurrences of the `'approved'` state.
+
+# # [1174. Immediate Food Delivery II](https://leetcode.com/problems/immediate-food-delivery-ii/description/?envType=study-plan-v2&envId=top-sql-50)
+
+Table: `Transactions`
+
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| country       | varchar |
+| state         | enum    |
+| amount        | int     |
+| trans_date    | date    |
++---------------+---------+
+id is the primary key of this table.
+The table has information about incoming transactions.
+The state column is an enum of type ["approved", "declined"].
+```
+
+Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+
+Return the result table in **any order** .
+
+The query result format is in the following example.
+
+**Example 1:** 
+
+```
+Input: 
+Transactions table:
++------+---------+----------+--------+------------+
+| id   | country | state    | amount | trans_date |
++------+---------+----------+--------+------------+
+| 121  | US      | approved | 1000   | 2018-12-18 |
+| 122  | US      | declined | 2000   | 2018-12-19 |
+| 123  | US      | approved | 2000   | 2019-01-01 |
+| 124  | DE      | approved | 2000   | 2019-01-07 |
++------+---------+----------+--------+------------+
+Output: 
++----------+---------+-------------+----------------+--------------------+-----------------------+
+| month    | country | trans_count | approved_count | trans_total_amount | approved_total_amount |
++----------+---------+-------------+----------------+--------------------+-----------------------+
+| 2018-12  | US      | 2           | 1              | 3000               | 1000                  |
+| 2019-01  | US      | 1           | 1              | 2000               | 2000                  |
+| 2019-01  | DE      | 1           | 1              | 2000               | 2000                  |
++----------+---------+-------------+----------------+--------------------+-----------------------+
+```
+> My Code
+```sql
+# Write your MySQL query statement below
+
+  
+
+SELECT
+
+ROUND(SUM(IF(order_date = customer_pref_delivery_date,1,0))*100/COUNT(DISTINCT customer_id),2)
+
+AS immediate_percentage
+
+FROM Delivery
+
+WHERE  (customer_id, order_date)  IN
+
+(SELECT customer_id,  MIN(order_date)  AS first_order
+
+FROM Delivery
+
+GROUP  BY customer_id);
+```
+# [550. Game Play Analysis IV](https://leetcode.com/problems/game-play-analysis-iv/description/?envType=study-plan-v2&envId=top-sql-50)
+
+Table: `Activity`
+
+```
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| player_id    | int     |
+| device_id    | int     |
+| event_date   | date    |
+| games_played | int     |
++--------------+---------+
+(player_id, event_date) is the primary key (combination of columns with unique values) of this table.
+This table shows the activity of players of some games.
+Each row is a record of a player who logged in and played a number of games (possibly 0) before logging out on someday using some device.
+```
+
+Write asolutionto report the **fraction**  of players that logged in again on the day after the day they first logged in, **rounded to 2 decimal places** . In other words, you need to count the number of players that logged in for at least two consecutive days starting from their first login date, then divide that number by the total number of players.
+
+Theresult format is in the following example.
+
+**Example 1:** 
+
+```
+Input: 
+Activity table:
++-----------+-----------+------------+--------------+
+| player_id | device_id | event_date | games_played |
++-----------+-----------+------------+--------------+
+| 1         | 2         | 2016-03-01 | 5            |
+| 1         | 2         | 2016-03-02 | 6            |
+| 2         | 3         | 2017-06-25 | 1            |
+| 3         | 1         | 2016-03-02 | 0            |
+| 3         | 4         | 2018-07-03 | 5            |
++-----------+-----------+------------+--------------+
+Output: 
++-----------+
+| fraction  |
++-----------+
+| 0.33      |
++-----------+
+Explanation: 
+Only the player with id 1 logged back in after the first day he had logged in so the answer is 1/3 = 0.33
+```
+> My Code
+```sql
+# Write your MySQL query statement below
+
+SELECT
+
+ROUND(  COUNT(DISTINCT player_id)/(  SELECT  COUNT(DISTINCT player_id)  FROM Activity),2)
+
+AS fraction
+
+FROM Activity
+
+WHERE  (player_id,  DATE_SUB(event_date,  INTERVAL  1  DAY))  IN
+
+(SELECT player_id,  MIN(event_date)  as first_played
+
+FROM Activity
+
+GROUP  BY player_id);
+```
