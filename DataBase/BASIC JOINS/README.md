@@ -236,96 +236,6 @@ As we can see, users with IDs 30 and 96 visited the mall one time without making
 > Editorial
 
 
-# Pandas
-
-To identify customers who visited but did not make any transactions, we need to remove the records of customers who made transactions from the list of all customers who visited. By doing so, we convert this problem to a typical "NOT IN" problem. There are two main ways to solve "NOT IN" problems: 1) using the function similar to  `NOT IN/EXISTS`  directly or 2)`LEFT OUTER JOIN/merge`  where the right table is set as  `NULL`. We will introduce both methods in pandas and Mysql.
-
-### Approach 1: Removing Records Using  `~`  and  `isin()`
-
-#### Algorithm
-
-For this approach, we leverage the functions  `~`  and  `isin()`  to exclude unwanted records from the list. Since we want to remove the customers who made transactions from all customers who visited, we first identify those customers from the DataFrame  `visits`  to see who are also in the DataFrame  `transactions`  using  `isin()`. We then remove these visits from all visits using  `~`.
-
-```python
-visits_no_trans = visits[~visits.visit_id.isin(transactions.visit_id)]
-```
-
-This step creates a new DataFrame that contains the visits that the customers made no transactions.
-
-visit_id  | customer_id
-|  --------  |  -------  |
-4  | 30
-6  | 96
-7  | 54
-8  | 54
-
-The next step is to count how many of these types of visits were made by each customer. To do this, we have the results grouped by the  `customer_id`  and  `count`  the  `visit_id`. To get the final output, we also need to rename the column that stores the calculated result.
-
-```python
-df = visits_no_trans.groupby('customer_id', as_index=False)['visit_id'].count()
-
-return df.rename(columns={'visit_id': 'count_no_trans'})
-```
-
-#### Implementation
-
-​
-
-### Approach 2: Removing Records Using  `left merge`  and  `isna()`
-
-#### Algorithm
-
-For this approach, we leverage the  `left merge`  and  `isna()`  to achieve the same goal: removing the visits with transactions from all visits. To do this, we first  `left merge`  the DataFrame  `visits`  that contain all  `visit_id`s to the DataFrame  `transactions`  that contain only the  `visit_id`s that have transactions. We want to make sure the records that need to be removed are placed in the right DataFrame.
-
-```python
-visits_no_trans = visits.merge(transactions, on='visit_id', how='left')
-```
-
-We now have a DataFrame with all  `visit_id`s and their corresponding transactions. The visits that have no transactions associated return  `null`  values for the column  `transaction_id`.
-
-visit_id  |  customer_id |  transaction_id  |  amount
-|  --------  |  -------  |   --------  |  -------  | 
-1  |    23 |  12  |  910
-2  |  9  |  13  |  970
-4  |  30  |  null  |  null
-5  |  54  |  2  |  310
-5  |  54  |  3  |  300
-5  |  54  |  9  |  200
-6  |  96  |  null  |  null
-7  |  54  |  null  |  null
-8  |  54  |  null  |  null
-
-Now we only need to remove those visits that have  `null`  transactions. We can use the function  `isna()`  to achieve this.
-
-```python
-visits_no_trans = visits_no_trans[visits_no_trans.transaction_id.isna()]
-```
-
-The DataFrame  `visits_no_trans`  now retains only the visits that have no transactions.
-
-visit_id | customer_id | transaction_id | amount |
-|  --------  |  -------  |   --------  |  -------  | 
-4 |30|null|null
-6|96|null|null
-7|54|null|null
-8|54|null|null
-
-Next, we want to count how many of these types of visits were made by each customer. To do this, we have the results grouped by the  `customer_id`  and  `count`  the  `visit_id`. To get the final output, we also need to rename the column that stores the calculated result.
-
-```python
-df = visits_no_trans.groupby('customer_id', as_index=False)['visit_id'].count()
-
-return df.rename(columns={'visit_id': 'count_no_trans'})
-```
-
-#### Implementation
-
-​
-
-----------
-
-​
-
 # Database
 
 ### Approach 1: Removing Records Using  `NOT IN/EXISTS`
@@ -588,7 +498,7 @@ By combining these two conditions with an  `AND`  clause, we ensure that we only
 
 #### Implementation
 
-MySQL
+> MySQL
 
 ```sql
 WITH PreviousWeatherData AS

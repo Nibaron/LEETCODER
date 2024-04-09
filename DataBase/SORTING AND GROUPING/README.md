@@ -62,60 +62,60 @@ SELECT teacher_id,
 FROM Teacher
 GROUP BY teacher_id;
 ```
+
 # [1141. User Activity for the Past 30 Days I](https://leetcode.com/problems/user-activity-for-the-past-30-days-i/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Table: `Teacher`
+Table: `Activity`
 
 ```
-+-------------+------+
-| Column Name | Type |
-+-------------+------+
-| teacher_id  | int  |
-| subject_id  | int  |
-| dept_id     | int  |
-+-------------+------+
-(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
-Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| session_id    | int     |
+| activity_date | date    |
+| activity_type | enum    |
++---------------+---------+
+This table may have duplicate rows.
+The activity_type column is an ENUM (category) of type ('open_session', 'end_session', 'scroll_down', 'send_message').
+The table shows the user activities for a social media website. 
+Note that each session belongs to exactly one user.
 ```
 
-Write a solution to calculatethe number of unique subjects each teacher teaches in the university.
+Write a solution to find the daily active user count for a period of `30` days ending `2019-07-27` inclusively. A user was active on someday if they made at least one activity on that day.
 
 Return the result table in **any order** .
 
-Theresult format is shown in the following example.
+Theresult format is in the following example.
 
 **Example 1:** 
 
 ```
 Input: 
-Teacher table:
-+------------+------------+---------+
-| teacher_id | subject_id | dept_id |
-+------------+------------+---------+
-| 1          | 2          | 3       |
-| 1          | 2          | 4       |
-| 1          | 3          | 3       |
-| 2          | 1          | 1       |
-| 2          | 2          | 1       |
-| 2          | 3          | 1       |
-| 2          | 4          | 1       |
-+------------+------------+---------+
-Output:  
-+------------+-----+
-| teacher_id | cnt |
-+------------+-----+
-| 1          | 2   |
-| 2          | 4   |
-+------------+-----+
-Explanation: 
-Teacher 1:
-  - They teach subject 2 in departments 3 and 4.
-  - They teach subject 3 in department 3.
-Teacher 2:
-  - They teach subject 1 in department 1.
-  - They teach subject 2 in department 1.
-  - They teach subject 3 in department 1.
-  - They teach subject 4 in department 1.
+Activity table:
++---------+------------+---------------+---------------+
+| user_id | session_id | activity_date | activity_type |
++---------+------------+---------------+---------------+
+| 1       | 1          | 2019-07-20    | open_session  |
+| 1       | 1          | 2019-07-20    | scroll_down   |
+| 1       | 1          | 2019-07-20    | end_session   |
+| 2       | 4          | 2019-07-20    | open_session  |
+| 2       | 4          | 2019-07-21    | send_message  |
+| 2       | 4          | 2019-07-21    | end_session   |
+| 3       | 2          | 2019-07-21    | open_session  |
+| 3       | 2          | 2019-07-21    | send_message  |
+| 3       | 2          | 2019-07-21    | end_session   |
+| 4       | 3          | 2019-06-25    | open_session  |
+| 4       | 3          | 2019-06-25    | end_session   |
++---------+------------+---------------+---------------+
+Output: 
++------------+--------------+ 
+| day        | active_users |
++------------+--------------+ 
+| 2019-07-20 | 2            |
+| 2019-07-21 | 2            |
++------------+--------------+ 
+Explanation: Note that we do not care about days with zero active users.
 ```
 > My Code
 ```sql
@@ -136,60 +136,73 @@ GROUP BY activity_date;
 ```
 # can you explain where we use `having` and where we use `where` ?
 
+
 # [1070. Product Sales Analysis III](https://leetcode.com/problems/product-sales-analysis-iii/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Table: `Teacher`
+Table: `Sales`
 
 ```
-+-------------+------+
-| Column Name | Type |
-+-------------+------+
-| teacher_id  | int  |
-| subject_id  | int  |
-| dept_id     | int  |
-+-------------+------+
-(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
-Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| sale_id     | int   |
+| product_id  | int   |
+| year        | int   |
+| quantity    | int   |
+| price       | int   |
++-------------+-------+
+(sale_id, year) is the primary key (combination of columns with unique values) of this table.
+product_id is a foreign key (reference column) to `Product` table.
+Each row of this table shows a sale on the product product_id in a certain year.
+Note that the price is per unit.
 ```
 
-Write a solution to calculatethe number of unique subjects each teacher teaches in the university.
+Table: `Product`
 
-Return the result table in **any order** .
+```
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| product_id   | int     |
+| product_name | varchar |
++--------------+---------+
+product_id is the primary key (column with unique values) of this table.
+Each row of this table indicates the product name of each product.
+```
 
-Theresult format is shown in the following example.
+Write a solution to selectthe **product id** , **year** , **quantity** , and **price**  for the **first year**  of every product sold.
+
+Return the resulting table in **any order** .
+
+Theresult format is in the following example.
 
 **Example 1:** 
 
 ```
 Input: 
-Teacher table:
-+------------+------------+---------+
-| teacher_id | subject_id | dept_id |
-+------------+------------+---------+
-| 1          | 2          | 3       |
-| 1          | 2          | 4       |
-| 1          | 3          | 3       |
-| 2          | 1          | 1       |
-| 2          | 2          | 1       |
-| 2          | 3          | 1       |
-| 2          | 4          | 1       |
-+------------+------------+---------+
-Output:  
-+------------+-----+
-| teacher_id | cnt |
-+------------+-----+
-| 1          | 2   |
-| 2          | 4   |
-+------------+-----+
-Explanation: 
-Teacher 1:
-  - They teach subject 2 in departments 3 and 4.
-  - They teach subject 3 in department 3.
-Teacher 2:
-  - They teach subject 1 in department 1.
-  - They teach subject 2 in department 1.
-  - They teach subject 3 in department 1.
-  - They teach subject 4 in department 1.
+Sales table:
++---------+------------+------+----------+-------+
+| sale_id | product_id | year | quantity | price |
++---------+------------+------+----------+-------+ 
+| 1       | 100        | 2008 | 10       | 5000  |
+| 2       | 100        | 2009 | 12       | 5000  |
+| 7       | 200        | 2011 | 15       | 9000  |
++---------+------------+------+----------+-------+
+Product table:
++------------+--------------+
+| product_id | product_name |
++------------+--------------+
+| 100        | Nokia        |
+| 200        | Apple        |
+| 300        | Samsung      |
++------------+--------------+
+Output: 
++------------+------------+----------+-------+
+| product_id | first_year | quantity | price |
++------------+------------+----------+-------+ 
+| 100        | 2008       | 10       | 5000  |
+| 200        | 2011       | 15       | 9000  |
++------------+------------+----------+-------+
 ```
 if you have though about it, you are wrong.
 ```sql
@@ -218,125 +231,110 @@ WHERE ( product_id, year) IN
     GROUP BY product_id
 );
 ```
+
 # [596. Classes More Than 5 Students](https://leetcode.com/problems/classes-more-than-5-students/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Table: `Teacher`
+Table: `Courses`
 
 ```
-+-------------+------+
-| Column Name | Type |
-+-------------+------+
-| teacher_id  | int  |
-| subject_id  | int  |
-| dept_id     | int  |
-+-------------+------+
-(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
-Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| student     | varchar |
+| class       | varchar |
++-------------+---------+
+(student, class) is the primary key (combination of columns with unique values) for this table.
+Each row of this table indicates the name of a student and the class in which they are enrolled.
 ```
 
-Write a solution to calculatethe number of unique subjects each teacher teaches in the university.
+Write a solution to find all the classes that have **at least five students** .
 
 Return the result table in **any order** .
 
-Theresult format is shown in the following example.
+Theresult format is in the following example.
 
 **Example 1:** 
 
 ```
 Input: 
-Teacher table:
-+------------+------------+---------+
-| teacher_id | subject_id | dept_id |
-+------------+------------+---------+
-| 1          | 2          | 3       |
-| 1          | 2          | 4       |
-| 1          | 3          | 3       |
-| 2          | 1          | 1       |
-| 2          | 2          | 1       |
-| 2          | 3          | 1       |
-| 2          | 4          | 1       |
-+------------+------------+---------+
-Output:  
-+------------+-----+
-| teacher_id | cnt |
-+------------+-----+
-| 1          | 2   |
-| 2          | 4   |
-+------------+-----+
+Courses table:
++---------+----------+
+| student | class    |
++---------+----------+
+| A       | Math     |
+| B       | English  |
+| C       | Math     |
+| D       | Biology  |
+| E       | Math     |
+| F       | Computer |
+| G       | Math     |
+| H       | Math     |
+| I       | Math     |
++---------+----------+
+Output: 
++---------+
+| class   |
++---------+
+| Math    |
++---------+
 Explanation: 
-Teacher 1:
-  - They teach subject 2 in departments 3 and 4.
-  - They teach subject 3 in department 3.
-Teacher 2:
-  - They teach subject 1 in department 1.
-  - They teach subject 2 in department 1.
-  - They teach subject 3 in department 1.
-  - They teach subject 4 in department 1.
+- Math has 6 students, so we include it.
+- English has 1 student, so we do not include it.
+- Biology has 1 student, so we do not include it.
+- Computer has 1 student, so we do not include it.
 ```
 > My Code
 ```sql
 SELECT class
-
 FROM Courses
-
 GROUP  BY class
-
 HAVING  COUNT(student)  >=  5;
 ```
+
 # [1729. Find Followers Count](https://leetcode.com/problems/find-followers-count/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Table: `Teacher`
+Table: `Followers`
 
 ```
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
-| teacher_id  | int  |
-| subject_id  | int  |
-| dept_id     | int  |
+| user_id     | int  |
+| follower_id | int  |
 +-------------+------+
-(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
-Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
-```
+(user_id, follower_id) is the primary key (combination of columns with unique values) for this table.
+This table contains the IDs of a user and a follower in a social media app where the follower follows the user.```
 
-Write a solution to calculatethe number of unique subjects each teacher teaches in the university.
+Write a solution that will, for each user, return the number of followers.
 
-Return the result table in **any order** .
+Return the result table ordered by `user_id` in ascending order.
 
-Theresult format is shown in the following example.
+Theresult format is in the following example.
 
 **Example 1:** 
 
-```
 Input: 
-Teacher table:
-+------------+------------+---------+
-| teacher_id | subject_id | dept_id |
-+------------+------------+---------+
-| 1          | 2          | 3       |
-| 1          | 2          | 4       |
-| 1          | 3          | 3       |
-| 2          | 1          | 1       |
-| 2          | 2          | 1       |
-| 2          | 3          | 1       |
-| 2          | 4          | 1       |
-+------------+------------+---------+
-Output:  
-+------------+-----+
-| teacher_id | cnt |
-+------------+-----+
-| 1          | 2   |
-| 2          | 4   |
-+------------+-----+
+Followers table:
++---------+-------------+
+| user_id | follower_id |
++---------+-------------+
+| 0       | 1           |
+| 1       | 0           |
+| 2       | 0           |
+| 2       | 1           |
++---------+-------------+
+Output: 
++---------+----------------+
+| user_id | followers_count|
++---------+----------------+
+| 0       | 1              |
+| 1       | 1              |
+| 2       | 2              |
++---------+----------------+
 Explanation: 
-Teacher 1:
-  - They teach subject 2 in departments 3 and 4.
-  - They teach subject 3 in department 3.
-Teacher 2:
-  - They teach subject 1 in department 1.
-  - They teach subject 2 in department 1.
-  - They teach subject 3 in department 1.
-  - They teach subject 4 in department 1.
+The followers of 0 are {1}
+The followers of 1 are {0}
+The followers of 2 are {0,1}
 ```
 > My Code
 ```sql
@@ -348,60 +346,78 @@ FROM Followers
 GROUP  BY user_id
 ORDER  BY user_id ASC;
 ```
+
 # [619. Biggest Single Number](https://leetcode.com/problems/biggest-single-number/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Table: `Teacher`
+Table: `MyNumbers`
 
 ```
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
-| teacher_id  | int  |
-| subject_id  | int  |
-| dept_id     | int  |
+| num         | int  |
 +-------------+------+
-(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
-Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
+This table may contain duplicates (In other words, there is no primary key for this table in SQL).
+Each row of this table contains an integer.
 ```
 
-Write a solution to calculatethe number of unique subjects each teacher teaches in the university.
+A **single number**  is a number that appeared only once in the `MyNumbers` table.
 
-Return the result table in **any order** .
+Find the largest **single number** . If there is no **single number** , report `null`.
 
-Theresult format is shown in the following example.
+The result format is in the following example.
+<ptable> </ptable>
 
 **Example 1:** 
 
 ```
 Input: 
-Teacher table:
-+------------+------------+---------+
-| teacher_id | subject_id | dept_id |
-+------------+------------+---------+
-| 1          | 2          | 3       |
-| 1          | 2          | 4       |
-| 1          | 3          | 3       |
-| 2          | 1          | 1       |
-| 2          | 2          | 1       |
-| 2          | 3          | 1       |
-| 2          | 4          | 1       |
-+------------+------------+---------+
-Output:  
-+------------+-----+
-| teacher_id | cnt |
-+------------+-----+
-| 1          | 2   |
-| 2          | 4   |
-+------------+-----+
-Explanation: 
-Teacher 1:
-  - They teach subject 2 in departments 3 and 4.
-  - They teach subject 3 in department 3.
-Teacher 2:
-  - They teach subject 1 in department 1.
-  - They teach subject 2 in department 1.
-  - They teach subject 3 in department 1.
-  - They teach subject 4 in department 1.
+MyNumbers table:
++-----+
+| num |
++-----+
+| 8   |
+| 8   |
+| 3   |
+| 3   |
+| 1   |
+| 4   |
+| 5   |
+| 6   |
++-----+
+Output: 
++-----+
+| num |
++-----+
+| 6   |
++-----+
+Explanation: The single numbers are 1, 4, 5, and 6.
+Since 6 is the largest single number, we return it.
+```
+
+**Example 2:** 
+
+```
+Input: 
+MyNumbers table:
++-----+
+| num |
++-----+
+| 8   |
+| 8   |
+| 7   |
+| 7   |
+| 3   |
+| 3   |
+| 3   |
++-----+
+Output: 
++------+
+| num  |
++------+
+| null |
++------+
+Explanation: There are no single numbers in the input table so we return null.
 ```
 > My Code
 ```sql
