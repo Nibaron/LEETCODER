@@ -226,6 +226,179 @@ SELECT *,
     IF(X+Y>Z AND Y+Z>X AND Z+X>Y, "Yes", "No") AS triangle
 FROM Triangle;
 ```
+# [180. Consecutive Numbers](https://leetcode.com/problems/consecutive-numbers/description/?envType=study-plan-v2&envId=top-sql-50)
+
+Table: `Logs`
+
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| num         | varchar |
++-------------+---------+
+In SQL, id is the primary key for this table.
+id is an autoincrement column.
+```
+
+Find all numbers that appear at least three times consecutively.
+
+Return the result table in **any order** .
+
+Theresult format is in the following example.
+
+**Example 1:** 
+
+```
+Input: 
+Logs table:
++----+-----+
+| id | num |
++----+-----+
+| 1  | 1   |
+| 2  | 1   |
+| 3  | 1   |
+| 4  | 2   |
+| 5  | 1   |
+| 6  | 2   |
+| 7  | 2   |
++----+-----+
+Output: 
++-----------------+
+| ConsecutiveNums |
++-----------------+
+| 1               |
++-----------------+
+Explanation: 
+1 is the only number that appears consecutively for at least three times.
+```
+
+> Approach
+
+Join 3 times and see results.
+
+```sql
+SELECT  *
+FROM Logs l1, Logs l2, Logs l3 
+```
+
+| id | num | id | num | id | num |  
+| -- | --- | -- | --- | -- | --- |  
+| 1 |  1  |  7  | 2  | 1 | 1 |  
+| 2 | 1 | 7 | 2 | 1 | 1 |  
+| 3 | 1 | 7 | 2 | 1 | 1 |  
+| 4 | 2 | 7 | 2 | 1 | 1 |  
+| 5 | 1 | 7 | 2 | 1 | 1 |  
+| 6 | 2 | 7 | 2 | 1 | 1 |  
+| 7 | 2 | 7 | 2 | 1 | 1 |  
+| 1 | 1 | 6 | 2 | 1 | 1 |  
+| 2 | 1 | 6 | 2 | 1 | 1 |  
+| 3 | 1 | 6 | 2 | 1 | 1 |  
+| 4 | 2 | 6 | 2 | 1 | 1 |  
+| 5 | 1 | 6 | 2 | 1 | 1 |  
+| 6 | 2 | 6 | 2 | 1 | 1 |  
+| 7 | 2 | 6 | 2 | 1 | 1 |  
+| 1 | 1 | 5 | 1 | 1 | 1 |  
+| 2 | 1 | 5 | 1 | 1 | 1 |  
+| 3 | 1 | 5 | 1 | 1 | 1 |  
+| 4 | 2 | 5 | 1 | 1 | 1 |  
+| 5 | 1 | 5 | 1 | 1 | 1 |  
+| 6 | 2 | 5 | 1 | 1 | 1 |  
+| 7 | 2 | 5 | 1 | 1 | 1 |  
+| 1 | 1 | 4 | 2 | 1 | 1 |  
+| 2 | 1 | 4 | 2 | 1 | 1 |  
+| 3 | 1 | 4 | 2 | 1 | 1 |  
+| 4 | 2 | 4 | 2 | 1 | 1 |  
+| 5 | 1 | 4 | 2 | 1 | 1 |  
+| 6 | 2 | 4 | 2 | 1 | 1 |  
+| 7 | 2 | 4...
+
+cross join of three table, 1st two col comes from l1, then from l2 and so on.
+Here, we are looking for the tuple where id difference is 1 and num is equal.
+
+> My Code
+```sql
+# Write your MySQL query statement below
+SELECT DISTINCT l1.num as ConsecutiveNums
+FROM Logs l1, Logs l2, Logs l3
+WHERE l1.id + 1 = l2.id AND l2.id + 1 = l3.id
+    AND l1.num=l2.num AND l2.num=l3.num;
+```
+
+# [1164. Product Price at a Given Date](https://leetcode.com/problems/product-price-at-a-given-date/description/?envType=study-plan-v2&envId=top-sql-50)
+
+Table: `Products`
+
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| new_price     | int     |
+| change_date   | date    |
++---------------+---------+
+(product_id, change_date) is the primary key (combination of columns with unique values) of this table.
+Each row of this table indicates that the price of some product was changed to a new price at some date.
+
+Write a solution to find the prices of all products on `2019-08-16`. Assume the price of all products before any change is `10`.
+
+Return the result table in **any order** .
+
+Theresult format is in the following example.
+```
+**Example 1:** 
+
+```
+Input: 
+Products table:
++------------+-----------+-------------+
+| product_id | new_price | change_date |
++------------+-----------+-------------+
+| 1          | 20        | 2019-08-14  |
+| 2          | 50        | 2019-08-14  |
+| 1          | 30        | 2019-08-15  |
+| 1          | 35        | 2019-08-16  |
+| 2          | 65        | 2019-08-17  |
+| 3          | 20        | 2019-08-18  |
++------------+-----------+-------------+
+Output: 
++------------+-------+
+| product_id | price |
++------------+-------+
+| 2          | 50    |
+| 1          | 35    |
+| 3          | 10    |
++------------+-------+
+```
+
+> Intuition
+
+we will take two types of values in answer.
+1. `max of date` which is less than `2019-08-16`
+2. dates come only after `2019-08-16`, here we add `10`
+
+> My Code
+```sql
+# Write your MySQL query statement below
+SELECT product_id, new_price AS price
+FROM Products
+WHERE (product_id, change_date) IN (
+    SELECT product_id, MAX(change_date)
+    FROM Products
+    WHERE change_date <= '2019-08-16'
+    GROUP BY product_id
+)
+
+UNION
+
+SELECT product_id,  10  AS price
+FROM Products
+GROUP  BY product_id
+HAVING  MIN(change_date)  >  '2019-08-16'
+
+ORDER BY product_id;
+```
+
 
 # [1204. Last Person to Fit in the Bus](https://leetcode.com/problems/last-person-to-fit-in-the-bus/description/?envType=study-plan-v2&envId=top-sql-50)
 
