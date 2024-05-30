@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/User/REACT/LEETCODER/Interview/Welldev/Tree",
-      "program": "c:/Users/User/REACT/LEETCODER/Interview/Welldev/Tree/build/Debug/outDebug",
+      "cwd": "c:/Users/User/REACT/LEETCODER/Interview/W3",
+      "program": "c:/Users/User/REACT/LEETCODER/Interview/W3/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
